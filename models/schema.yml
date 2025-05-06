@@ -3,10 +3,41 @@ version: 2
 sources:
   - name: raw
     schema: gz_raw_data
+    description: Raw source data for Greenweez orders, products, and shipping — extracted from gzipped sources.
     tables:
       - name: sales
         identifier: raw_gz_sales
+        description: Sales data of Greenweez; each row represents a product sold in a specific order.
+        columns:
+          - name: date_date
+            description: Date when the sale occurred.
+          - name: orders_id
+            description: Unique identifier for the order.
+          - name: pdt_id
+            description: Unique identifier for the product sold.
+          - name: revenue
+            description: Revenue generated from the product in the order (in float format).
+          - name: quantity
+            description: Number of units of the product sold in that order.
+
       - name: product
         identifier: raw_gz_product
+        description: Product catalog with product IDs and associated purchase prices.
+        columns:
+          - name: products_id
+            description: Unique identifier for the product.
+          - name: purchase_PRICE
+            description: Purchase price of the product.
+
       - name: ship
         identifier: raw_gz_ship
+        description: Shipping data associated with each order, including different cost estimates and final shipping cost.
+        columns:
+          - name: orders_id
+            description: Unique identifier for the order.
+          - name: shipping_fee
+            description: Shipping fee charged to the customer.
+          - name: logCost
+            description: Logistic cost associated with the shipment.
+          - name: ship_cost
+            description: Shipping cost stored.
