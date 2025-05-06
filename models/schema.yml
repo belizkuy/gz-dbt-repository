@@ -8,14 +8,14 @@ sources:
       - name: sales
         identifier: raw_gz_sales
         description: Sales data of Greenweez; each row represents a product sold in a specific order.
+        tests: 
+           - unique:
+             -column_name: "(orders_id || '-' ||pdt_id)"
         columns:
           - name: date_date
             description: Date when the sale occurred.
           - name: orders_id
             description: Unique identifier for the order.
-            tests: 
-                  - unique
-                  - not_null
           - name: pdt_id
             description: Unique identifier for the product sold.
           - name: revenue
