@@ -13,6 +13,9 @@ sources:
             description: Date when the sale occurred.
           - name: orders_id
             description: Unique identifier for the order.
+            tests: 
+                  - unique
+                  - not_null
           - name: pdt_id
             description: Unique identifier for the product sold.
           - name: revenue
@@ -26,6 +29,9 @@ sources:
         columns:
           - name: products_id
             description: Unique identifier for the product.
+            tests: 
+                   - unique
+                   - not_null
           - name: purchase_PRICE
             description: Purchase price of the product.
 
@@ -35,6 +41,9 @@ sources:
         columns:
           - name: orders_id
             description: Unique identifier for the order.
+            tests: 
+                  - unique
+                  - not_null
           - name: shipping_fee
             description: Shipping fee charged to the customer.
           - name: logCost
