@@ -3,36 +3,37 @@ version: 2
 sources:
   - name: raw
     schema: gz_raw_data
-    description: Raw source data for Greenweez orders, products, and shipping — extracted from gzipped sources.
     tables:
       - name: sales
         identifier: raw_gz_sales
-        description: Sales data of Greenweez; each row represents a product sold in a specific order.
-        tests: 
-           - unique:
-             -column_name: "(orders_id || '-' ||pdt_id)"
+        description: Sales of Greenweez. We have one row per product ID found in each order ID.
         columns:
           - name: date_date
-            description: Date when the sale occurred.
+            description: Date of purchase.
           - name: orders_id
-            description: Unique identifier for the order.
+            description: Foreign key to `ship`.
           - name: pdt_id
-            description: Unique identifier for the product sold.
+            description: Foreign key to `product`.
           - name: revenue
-            description: Revenue generated from the product in the order (in float format).
-          - name: quantity
-            description: Number of units of the product sold in that order.
+            description: The amount paid by the customer. revenue = quantity * selling_price.
+          - name: quantity  # Fixed typo from "quanitity"
+            description: The number of products purchased for a given order.
+        tests:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns:
+                - orders_id
+                - pdt_id
 
       - name: product
         identifier: raw_gz_product
-        description: Product catalog with product IDs and associated purchase prices.
+        description: Product catalogue with product IDs and associated purchase prices.
         columns:
           - name: products_id
             description: Unique identifier for the product.
             tests: 
-                   - unique
-                   - not_null
-          - name: purchase_PRICE
+              - unique
+              - not_null
+          - name: purchase_PRICE  # Keep consistent with your actual column name
             description: Purchase price of the product.
 
       - name: ship
@@ -42,11 +43,11 @@ sources:
           - name: orders_id
             description: Unique identifier for the order.
             tests: 
-                  - unique
-                  - not_null
+              - unique
+              - not_null
           - name: shipping_fee
             description: Shipping fee charged to the customer.
           - name: logCost
             description: Logistic cost associated with the shipment.
           - name: ship_cost
-            description: Shipping cost stored.
+            description: Final shipping cost stored.
