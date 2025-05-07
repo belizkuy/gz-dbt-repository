@@ -1,0 +1,53 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: gz_raw_data
+    tables:
+      - name: sales
+        identifier: raw_gz_sales
+        description: Sales of Greenweez. We have one row per product ID found in each order ID.
+        columns:
+          - name: date_date
+            description: Date of purchase.
+          - name: orders_id
+            description: Foreign key to `ship`.
+          - name: pdt_id
+            description: Foreign key to `product`.
+          - name: revenue
+            description: The amount paid by the customer. revenue = quantity * selling_price.
+          - name: quantity  # Fixed typo from "quanitity"
+            description: The number of products purchased for a given order.
+        tests:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns:
+                - orders_id
+                - pdt_id
+
+      - name: product
+        identifier: raw_gz_product
+        description: Product catalogue with product IDs and associated purchase prices.
+        columns:
+          - name: products_id
+            description: Unique identifier for the product.
+            tests: 
+              - unique
+              - not_null
+          - name: purchase_PRICE  # Keep consistent with your actual column name
+            description: Purchase price of the product.
+
+      - name: ship
+        identifier: raw_gz_ship
+        description: Shipping data associated with each order, including different cost estimates and final shipping cost.
+        columns:
+          - name: orders_id
+            description: Unique identifier for the order.
+            tests: 
+              - unique
+              - not_null
+          - name: shipping_fee
+            description: Shipping fee charged to the customer.
+          - name: logCost
+            description: Logistic cost associated with the shipment.
+          - name: ship_cost
+            description: Final shipping cost stored.
